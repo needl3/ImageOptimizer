@@ -1,0 +1,4 @@
+tinify==1.5.1
+tkinter==8.6
+shutil
+os
