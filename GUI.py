@@ -15,7 +15,7 @@ def generateKey():
 		
 		tk.Label(subRoot2, text="Generating key....").grid()
 		root.update()
-		print("generating.....")
+
 		#--------------------Key generation center--------------------------------------
 		from selenium import webdriver
 		
@@ -38,7 +38,7 @@ def generateKey():
 		# #-----------------------------------------------------------------------------
 		subRoot2.grid_forget()
 		tk.Label(subRoot2, text="Now, check your email for the key and paste it in the empty API field", height=5).grid(padx=10)
-		print("Done")
+
 		root.update()
 
 	root = tk.Tk()
@@ -122,7 +122,7 @@ def metadata_log_update(metadata_to_delete):
 		vc.files_log_dialog.insert(tk.END, ('\n' + metadata_to_delete + '\'s metadata is marked to be deleted'))
 	if 	vc.metadata_list.get(metadata_to_delete)[1].get() == 0:
 		vc.files_log_dialog.insert(tk.END, ('\n' + metadata_to_delete + ' is unmarked and it\'s metadata now is to be preserved'))
-'''
+
 if __name__ == "__main__":
 	rootPrime = tk.Tk()
 	rootPrime.geometry('1125x700')
@@ -215,6 +215,3 @@ if __name__ == "__main__":
 	except:
 		vc.files_log_dialog.insert(tk.END, 'Something is wrong...\nCheck Internet Connection')
 	root.mainloop()
-'''
-if __name__ == "__main__":
-	generateKey()
