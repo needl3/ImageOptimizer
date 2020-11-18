@@ -62,7 +62,7 @@ try:
 	tf.key = var_api_key
 	tf.validate()
 	compression_counter_data = {
-		'Current Compression through API:\n': api_entry,
+		'Current API:\n': api_entry,
 		'Compressions Done:': tf.compression_count,
 		'Compressions Remaining:': 500-tf.compression_count
 	}

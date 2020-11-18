@@ -11,34 +11,34 @@ def generateKey():
 		subRoot2.destroy()
 		
 		subRoot2 = tk.LabelFrame(subRoot, border=0)
-		subRoot2.grid(padx=10, pady=10)
+		subRoot2.grid(padx=10, pady=5)
 		
-		tk.Label(subRoot2, text="Generating key....").grid()
+		lab = tk.Label(subRoot2, text="Generating key....")
+		lab.grid(row=1, column=1, padx=10)
 		root.update()
 
 		#--------------------Key generation center--------------------------------------
-		from selenium import webdriver
+		# from selenium import webdriver
 		
-		options = webdriver.ChromeOptions()
-		options.add_argument("headless")
+		# options = webdriver.ChromeOptions()
+		# options.add_argument("headless")
 
-		browser = webdriver.Chrome(options=options)
-		browser.get("https://tinypng.com/developers")
+		# browser = webdriver.Chrome(options=options)
+		# browser.get("https://tinypng.com/developers")
 
-		fnameObj = browser.find_element_by_name("fullName")
-		emailObj = browser.find_element_by_name("mail")
+		# fnameObj = browser.find_element_by_name("fullName")
+		# emailObj = browser.find_element_by_name("mail")
 
-		fnameObj.send_keys("Noone")
+		# fnameObj.send_keys("Noone")
 
-		emailObj.send_keys(ent.get())
+		# emailObj.send_keys(ent.get())
 
-		fnameObj.submit()
+		# fnameObj.submit()
 
-		browser.quit()
+		# browser.quit()
 		# #-----------------------------------------------------------------------------
-		subRoot2.grid_forget()
-		tk.Label(subRoot2, text="Now, check your email for the key and paste it in the empty API field", height=5).grid(padx=10)
-
+		lab.config(text="Now, check your email for the key and paste it in the empty API field", height=5)
+		tk.Button(subRoot2, text="Ok", command=root.destroy, width=10).grid(row=2, columnspan=2, pady=5)
 		root.update()
 
 	root = tk.Tk()

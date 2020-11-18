@@ -107,5 +107,4 @@ def check_informations():
 				original.write(to_be_copied.read())
 			os.remove('test_only_temp.py')
 		vc.files_log_dialog.insert(tk.END, '\nAPI Key updated successfully')
-
 	return True
