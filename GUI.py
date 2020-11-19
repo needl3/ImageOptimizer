@@ -7,7 +7,7 @@ import urllib
 
 background_color = 'light green'
 def generateKey():
-	def submitted(subRoot, subRoot2, ent, root):
+	def submitted(subRoot, subRoot2, email, root):
 		subRoot2.destroy()
 		
 		subRoot2 = tk.LabelFrame(subRoot, border=0)
@@ -18,24 +18,24 @@ def generateKey():
 		root.update()
 
 		#--------------------Key generation center--------------------------------------
-		# from selenium import webdriver
+		from selenium import webdriver
 		
-		# options = webdriver.ChromeOptions()
-		# options.add_argument("headless")
+		options = webdriver.ChromeOptions()
+		options.add_argument("headless")
 
-		# browser = webdriver.Chrome(options=options)
-		# browser.get("https://tinypng.com/developers")
+		browser = webdriver.Chrome(options=options)
+		browser.get("https://tinypng.com/developers")
 
-		# fnameObj = browser.find_element_by_name("fullName")
-		# emailObj = browser.find_element_by_name("mail")
+		fnameObj = browser.find_element_by_name("fullName")
+		emailObj = browser.find_element_by_name("mail")
 
-		# fnameObj.send_keys("Noone")
+		fnameObj.send_keys("Noone")
 
-		# emailObj.send_keys(ent.get())
+		emailObj.send_keys(email)
 
-		# fnameObj.submit()
+		fnameObj.submit()
 
-		# browser.quit()
+		browser.quit()
 		# #-----------------------------------------------------------------------------
 		lab.config(text="Now, check your email for the key and paste it in the empty API field", height=5)
 		tk.Button(subRoot2, text="Ok", command=root.destroy, width=10).grid(row=2, columnspan=2, pady=5)
@@ -54,7 +54,7 @@ def generateKey():
 	ent = tk.Entry(subRoot2, width=30)
 	ent.grid(row=1, column=2, padx=5)
 	
-	tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent, root), width=5).grid(row=2, columnspan=3)
+	tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent.get(), root), width=5).grid(row=2, columnspan=3)
 
 	root.mainloop()
 
@@ -125,6 +125,7 @@ def metadata_log_update(metadata_to_delete):
 
 if __name__ == "__main__":
 	rootPrime = tk.Tk()
+	#rootPrime.call('wm', 'iconbitmap', rootPrime, os.getcwd()+"/favicon.pngn")
 	rootPrime.geometry('1125x700')
 	rootPrime.configure(bg = background_color)
 	rootPrime.title('Image Resizer')
