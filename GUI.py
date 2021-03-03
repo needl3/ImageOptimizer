@@ -2,67 +2,82 @@ import tkinter as tk
 from tkinter import filedialog
 import variable_container as vc
 import api_work
-import sys
+import sys, ctypes
 import os
 import urllib
-import requests
 import platform
+import chromedriver_binary
+import shutil
 
-if not os.path.exists(os.getcwd()+"\\driver"):
-	print('No driver detected...Downloading webdrivers...')
-	def downloadFiles(driverUrl, browserUrl):
-			#Configure driver files
-			try:
-				driver = requests.get(driverUrl
-					, allow_redirects=True)
-				open('driver', 'wb').write(driver.content)
-				print('Downloaded driver....')
-			except:
-				print('Cannot download driver...')
-			#Configure broswser files
-			try:
-				browser = requests.get(browserUrl
-					, allow_redirects=True)
-				open('browser', 'wb').write(browser.content)
-				print('Downloaded browser...')
-			except:
-				print('Browser not downloaded...')
-	urls = {
-		'win32':{
-			'32bit':{
-			'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-win32.zip",
-			'browser':"https://dw.uptodown.com/dwn/BVtYqTxjsG6GIPQGGiQuUDK68irbIy2u-8j_YnwoLcDGxEkB0HV5fd4mhXw4El_kT7DHjLIHUG6ShRW1jFkf36gGL0UEx8GZRpM1kempC6Htc52oW32Lcfa0TRdSmRGf/B4ljHk0MQBFREHRbaCaoK4bs62UExJjr6P-7MzHZuwtY3II6uwUiqhKpOfmrKHAeWfCje5jxfK2kTwZ6w9UxfUdyes6fZMWow0KkLTnYZeM-qRJuaWgoPgMJN0STxl6v/5B6ig6euvfquexvEAVD5ZIbn_sBKzgdhMUJdv2ncbMslceuLtdXvIADSpHwYwcmOJFKCZZhzWXavLfFUP_hvzQ==/"
-			},
-			'64bit':{
-				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-win64.zip",
-				'browser':"https://dw.uptodown.com/dwn/lqxuXjBazRHxcVduIRxl0FtkwwHA7rbyIVrLaDDwBahN4muj5vEx-kucEabUDD2drsUYX5Nz2r_AnhApld7wGWpxlDrEIgVB9z8aKhUR4uGXcbkq_c7X8ta7sEcUaQjM/DMh7hGvkkVvDTQcexE2LGD1Q69j8k96S2rpdfIBHcOlXaYeTCOBJ5AFabhU-h36_GBYJ5qpMTgViW-Xu62s2Z7sG22KrqCnvuq7yRe4T_JEDw2c0pLBm009QmwWiAqcr/uHt3kI5pMiZ1_kudm1hzk7A_dsmtr9zGbRuPk8U0bBsF4T2e1KBAfHosVdHPSG2FfdY46nAifMHTVxxqI-AAjQ==/"
-				}
-		},
-		'linux64':{
-			'32bit':{
-				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux32.tar.gz",
-				'browser':""
-			},
-			'64bit':{
-				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz",
-				'browser':""
-				}
-		}
-	}
-	os.mkdir("driver")
-	try:
-		instance = urls[sys.platform][platform.architecture()[0]]
-		print('Instance created as:', instance)
-		downloadFiles(instance['driver'], instance['browser'])
-	except:
-		root = tk.Tk()
-		root.title("Not supported")
-		l = tk.Label(root, text="Not supported for "+sys.platform+" platform. Use Windows or Linux systems.")
-		l.grid(row = 0, padx=10,  pady=10)
-		e = tk.Button(root, text = "OK", command = lambda: sys.exit(), width = 10)
-		e.grid(pady=10, row = 1)
+
+# if not os.path.exists(os.getcwd()+"\\driver"):
+# 	print('No driver detected...Downloading webdrivers...')
+# 	def downloadFiles(driverUrl, browserUrl):
+# 			#Configure driver files
+# 			try:
+# 				driver = requests.get(driverUrl
+# 					, allow_redirects=True)
+# 				open('driver', 'wb').write(driver.content)
+# 				print('Downloaded driver....')
+# 			except:
+# 				print('Cannot download driver...')
+# 			#Configure broswser files
+# 			try:
+# 				browser = requests.get(browserUrl
+# 					, allow_redirects=True)
+# 				open('browser', 'wb').write(browser.content)
+# 				print('Downloaded browser...')
+# 			except:
+# 				print('Browser not downloaded...')
+# 	urls = {
+# 		'win32':{
+# 			'32bit':{
+# 			'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-win32.zip",
+# 			'browser':"https://dw.uptodown.com/dwn/BVtYqTxjsG6GIPQGGiQuUDK68irbIy2u-8j_YnwoLcDGxEkB0HV5fd4mhXw4El_kT7DHjLIHUG6ShRW1jFkf36gGL0UEx8GZRpM1kempC6Htc52oW32Lcfa0TRdSmRGf/B4ljHk0MQBFREHRbaCaoK4bs62UExJjr6P-7MzHZuwtY3II6uwUiqhKpOfmrKHAeWfCje5jxfK2kTwZ6w9UxfUdyes6fZMWow0KkLTnYZeM-qRJuaWgoPgMJN0STxl6v/5B6ig6euvfquexvEAVD5ZIbn_sBKzgdhMUJdv2ncbMslceuLtdXvIADSpHwYwcmOJFKCZZhzWXavLfFUP_hvzQ==/"
+# 			},
+# 			'64bit':{
+# 				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-win64.zip",
+# 				'browser':"https://dw.uptodown.com/dwn/lqxuXjBazRHxcVduIRxl0FtkwwHA7rbyIVrLaDDwBahN4muj5vEx-kucEabUDD2drsUYX5Nz2r_AnhApld7wGWpxlDrEIgVB9z8aKhUR4uGXcbkq_c7X8ta7sEcUaQjM/DMh7hGvkkVvDTQcexE2LGD1Q69j8k96S2rpdfIBHcOlXaYeTCOBJ5AFabhU-h36_GBYJ5qpMTgViW-Xu62s2Z7sG22KrqCnvuq7yRe4T_JEDw2c0pLBm009QmwWiAqcr/uHt3kI5pMiZ1_kudm1hzk7A_dsmtr9zGbRuPk8U0bBsF4T2e1KBAfHosVdHPSG2FfdY46nAifMHTVxxqI-AAjQ==/"
+# 				}
+# 		},
+# 		'linux64':{
+# 			'32bit':{
+# 				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux32.tar.gz",
+# 				'browser':""
+# 			},
+# 			'64bit':{
+# 				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz",
+# 				'browser':""
+# 				}
+# 		}
+# 	}
+# 	os.mkdir("driver")
+# 	try:
+# 		instance = urls[sys.platform][platform.architecture()[0]]
+# 		print('Instance created as:', instance)
+# 		downloadFiles(instance['driver'], instance['browser'])
+# 	except:
+# 		root = tk.Tk()
+# 		root.title("Not supported")
+# 		l = tk.Label(root, text="Not supported for "+sys.platform+" platform. Use Windows or Linux systems.")
+# 		l.grid(row = 0, padx=10,  pady=10)
+# 		e = tk.Button(root, text = "OK", command = lambda: sys.exit(), width = 10)
+# 		e.grid(pady=10, row = 1)
+#----------------------------------------------------------------------------------------------------------
+
+
 background_color = 'light green'
 def generateKey():
+	if sys.platform != 'wi32':
+		#Discard function
+		discardRoot = tk.Tk()
+		discardRoot.configure(bg=background_color)
+		discardRoot.title("Not supported")
+		l = tk.Label(discardRoot, text="Not supported yet. Go get the key by yourself...", bg=background_color)
+		l.grid(row = 0, padx=10,  pady=10)
+		e = tk.Button(discardRoot, text = "OK", command = discardRoot.destroy, width = 10, bg=background_color)
+		e.grid(pady=10, row = 1)
+		return
 	def submitted(subRoot, subRoot2, email, root):
 		subRoot2.destroy()
 		
@@ -74,53 +89,45 @@ def generateKey():
 		root.update()
 
 		#--------------------Key generation center--------------------------------------
+		
 		from selenium import webdriver
-		options = webdriver.ChromeOptions()
-		options.add_argument("headless")
+		import edgedriver_autoinstaller
 
-		browser = webdriver.Chrome(options=options, executable_path=webdriverPath)
+		#Install edgedriver for Windows
+		edgedriver_autoinstaller.install()
+		browser = webdriver.Edge(executable_path="msedgedriver.exe")
 		browser.get("https://tinypng.com/developers")
 
 		fnameObj = browser.find_element_by_name("fullName")
 		emailObj = browser.find_element_by_name("mail")
-
+		
 		fnameObj.send_keys("Noone")
-
+		
 		emailObj.send_keys(email)
-
 		fnameObj.submit()
-
+		
 		browser.quit()
 		# #-----------------------------------------------------------------------------
 		lab.config(text="Now, check your email for the key and paste it in the empty API field", height=5)
 		tk.Button(subRoot2, text="Ok", command=root.destroy, width=10).grid(row=2, columnspan=2, pady=5)
 		root.update()
 
-	#Discard function
-	discardRoot = tk.Tk()
-	discardRoot.configure(bg=background_color)
-	discardRoot.title("Not supported")
-	l = tk.Label(discardRoot, text="Not supported yet. Go get by yourself...", bg=background_color)
-	l.grid(row = 0, padx=10,  pady=10)
-	e = tk.Button(discardRoot, text = "OK", command = discardRoot.destroy, width = 10, bg=background_color)
-	e.grid(pady=10, row = 1)
+	root = tk.Tk()
 
-	# root = tk.Tk()
-
-	# root.title('Key Generator')
-	# subRoot = tk.LabelFrame(root, border=0)
-	# subRoot.grid(padx=10, pady=10)
+	root.title('Key Generator')
+	subRoot = tk.LabelFrame(root, border=0)
+	subRoot.grid(padx=10, pady=10)
 	
-	# subRoot2 = tk.LabelFrame(subRoot, border=0)
-	# subRoot2.grid()
+	subRoot2 = tk.LabelFrame(subRoot, border=0)
+	subRoot2.grid()
 
-	# tk.Label(subRoot2, text="Enter your email:").grid(row=1, column=1, padx=5, pady=5)
-	# ent = tk.Entry(subRoot2, width=30)
-	# ent.grid(row=1, column=2, padx=5)
+	tk.Label(subRoot2, text="Enter your email:").grid(row=1, column=1, padx=5, pady=5)
+	ent = tk.Entry(subRoot2, width=30)
+	ent.grid(row=1, column=2, padx=5)
 	
-	# tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent.get(), root), width=5).grid(row=2, columnspan=3)
+	tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent.get(), root), width=5).grid(row=2, columnspan=3)
 
-	# root.mainloop()
+	root.mainloop()
 
 
 def reset_all_data():
