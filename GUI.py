@@ -2,113 +2,31 @@ import tkinter as tk
 from tkinter import filedialog
 import variable_container as vc
 import api_work
-import sys, ctypes
 import os
-import urllib
 import platform
-import chromedriver_binary
 import shutil
-
-
-# if not os.path.exists(os.getcwd()+"\\driver"):
-# 	print('No driver detected...Downloading webdrivers...')
-# 	def downloadFiles(driverUrl, browserUrl):
-# 			#Configure driver files
-# 			try:
-# 				driver = requests.get(driverUrl
-# 					, allow_redirects=True)
-# 				open('driver', 'wb').write(driver.content)
-# 				print('Downloaded driver....')
-# 			except:
-# 				print('Cannot download driver...')
-# 			#Configure broswser files
-# 			try:
-# 				browser = requests.get(browserUrl
-# 					, allow_redirects=True)
-# 				open('browser', 'wb').write(browser.content)
-# 				print('Downloaded browser...')
-# 			except:
-# 				print('Browser not downloaded...')
-# 	urls = {
-# 		'win32':{
-# 			'32bit':{
-# 			'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-win32.zip",
-# 			'browser':"https://dw.uptodown.com/dwn/BVtYqTxjsG6GIPQGGiQuUDK68irbIy2u-8j_YnwoLcDGxEkB0HV5fd4mhXw4El_kT7DHjLIHUG6ShRW1jFkf36gGL0UEx8GZRpM1kempC6Htc52oW32Lcfa0TRdSmRGf/B4ljHk0MQBFREHRbaCaoK4bs62UExJjr6P-7MzHZuwtY3II6uwUiqhKpOfmrKHAeWfCje5jxfK2kTwZ6w9UxfUdyes6fZMWow0KkLTnYZeM-qRJuaWgoPgMJN0STxl6v/5B6ig6euvfquexvEAVD5ZIbn_sBKzgdhMUJdv2ncbMslceuLtdXvIADSpHwYwcmOJFKCZZhzWXavLfFUP_hvzQ==/"
-# 			},
-# 			'64bit':{
-# 				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-win64.zip",
-# 				'browser':"https://dw.uptodown.com/dwn/lqxuXjBazRHxcVduIRxl0FtkwwHA7rbyIVrLaDDwBahN4muj5vEx-kucEabUDD2drsUYX5Nz2r_AnhApld7wGWpxlDrEIgVB9z8aKhUR4uGXcbkq_c7X8ta7sEcUaQjM/DMh7hGvkkVvDTQcexE2LGD1Q69j8k96S2rpdfIBHcOlXaYeTCOBJ5AFabhU-h36_GBYJ5qpMTgViW-Xu62s2Z7sG22KrqCnvuq7yRe4T_JEDw2c0pLBm009QmwWiAqcr/uHt3kI5pMiZ1_kudm1hzk7A_dsmtr9zGbRuPk8U0bBsF4T2e1KBAfHosVdHPSG2FfdY46nAifMHTVxxqI-AAjQ==/"
-# 				}
-# 		},
-# 		'linux64':{
-# 			'32bit':{
-# 				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux32.tar.gz",
-# 				'browser':""
-# 			},
-# 			'64bit':{
-# 				'driver':"https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz",
-# 				'browser':""
-# 				}
-# 		}
-# 	}
-# 	os.mkdir("driver")
-# 	try:
-# 		instance = urls[sys.platform][platform.architecture()[0]]
-# 		print('Instance created as:', instance)
-# 		downloadFiles(instance['driver'], instance['browser'])
-# 	except:
-# 		root = tk.Tk()
-# 		root.title("Not supported")
-# 		l = tk.Label(root, text="Not supported for "+sys.platform+" platform. Use Windows or Linux systems.")
-# 		l.grid(row = 0, padx=10,  pady=10)
-# 		e = tk.Button(root, text = "OK", command = lambda: sys.exit(), width = 10)
-# 		e.grid(pady=10, row = 1)
-#----------------------------------------------------------------------------------------------------------
-
-
+import requests
 background_color = 'light green'
 def generateKey():
-	if sys.platform != 'wi32':
-		#Discard function
-		discardRoot = tk.Tk()
-		discardRoot.configure(bg=background_color)
-		discardRoot.title("Not supported")
-		l = tk.Label(discardRoot, text="Not supported yet. Go get the key by yourself...", bg=background_color)
-		l.grid(row = 0, padx=10,  pady=10)
-		e = tk.Button(discardRoot, text = "OK", command = discardRoot.destroy, width = 10, bg=background_color)
-		e.grid(pady=10, row = 1)
-		return
-	def submitted(subRoot, subRoot2, email, root):
+	def submitted(subRoot, subRoot2, email, root, no_credentials = False):
 		subRoot2.destroy()
 		
 		subRoot2 = tk.LabelFrame(subRoot, border=0)
 		subRoot2.grid(padx=10, pady=5)
 		
-		lab = tk.Label(subRoot2, text="Generating key....")
+		lab = tk.Label(subRoot2, text="Generating key....Please Wait...")
 		lab.grid(row=1, column=1, padx=10)
 		root.update()
 
 		#--------------------Key generation center--------------------------------------
-		
-		from selenium import webdriver
-		import edgedriver_autoinstaller
-
-		#Install edgedriver for Windows
-		edgedriver_autoinstaller.install()
-		browser = webdriver.Edge(executable_path="msedgedriver.exe")
-		browser.get("https://tinypng.com/developers")
-
-		fnameObj = browser.find_element_by_name("fullName")
-		emailObj = browser.find_element_by_name("mail")
-		
-		fnameObj.send_keys("Noone")
-		
-		emailObj.send_keys(email)
-		fnameObj.submit()
-		
-		browser.quit()
-		# #-----------------------------------------------------------------------------
-		lab.config(text="Now, check your email for the key and paste it in the empty API field", height=5)
+		if no_credentials:
+			
+		else:
+			if requests.post('https://tinify.com/web/api', json = {'fullName':'noone', 'mail':email}).status_code == 200:
+				lab.config(text="Now, check your email for the key and paste it in the empty API field", height=5)
+			else:
+				lab.config(text="Unable to generate key.\nEither the internet is down or too many requests have been made from this network.", height=5)
+		#-----------------------------------------------------------------------------
 		tk.Button(subRoot2, text="Ok", command=root.destroy, width=10).grid(row=2, columnspan=2, pady=5)
 		root.update()
 
@@ -116,7 +34,7 @@ def generateKey():
 
 	root.title('Key Generator')
 	subRoot = tk.LabelFrame(root, border=0)
-	subRoot.grid(padx=10, pady=10)
+	subRoot.grid(padx=10, pady=0)
 	
 	subRoot2 = tk.LabelFrame(subRoot, border=0)
 	subRoot2.grid()
@@ -125,8 +43,8 @@ def generateKey():
 	ent = tk.Entry(subRoot2, width=30)
 	ent.grid(row=1, column=2, padx=5)
 	
-	tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent.get(), root), width=5).grid(row=2, columnspan=3)
-
+	tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent.get(), root)).grid(row=2, column=1, padx=3)
+	tk.Button(subRoot2, text='Generate with no credentials.', command=lambda: submitted(subRoot, subRoot2, ent.get(), root, no_credentials = True)).grid(row=2, column=2, padx=3)
 	root.mainloop()
 
 
@@ -248,10 +166,22 @@ if __name__ == "__main__":
 	# Frame to provide API Key
 	api_frame = tk.LabelFrame(left_frame_wrapper, text = 'API Key Field', bg = background_color)
 	vc.api_entry = tk.Entry(api_frame, width = 50)
-	vc.api_entry.grid(row=0)
+	vc.api_entry.grid(row=0, column = 0)
+	
 	try:
 		vc.api_entry.insert(0, vc.var_api_key)
 		vc.files_log_dialog.insert(tk.END, '\nAdded API key: {}'.format(vc.api_entry.get()))
+		#Hide function for key
+		def hideKey(var):
+			if var:
+				hide_key.configure(text='Show Key')
+				vc.api_entry.delete(0,tk.END)
+				vc.api_entry.insert(0, vc.var_api_key)
+			else:
+				hide_key.configure(text='Hide Key')
+		var_hide_key = tk.IntVar()
+		hide_key = tk.Checkbutton(api_frame, text='Hide Key', bg=background_color, variable = var_hide_key, command = lambda param = var_hide_key: hideKey(param))
+		hide_key.grid(row = 0, column = 1, padx = 10)
 	except AttributeError:
 		generateButton = tk.Button(api_frame, text='Generate API Key', command=generateKey, bg=background_color)
 		generateButton.grid(row=1)
