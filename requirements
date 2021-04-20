@@ -1,8 +1,4 @@
 tinify==1.5.1
 tkinter==8.6
-shutil
 os
-selenium
-platform
-chromedriver_binary
-edgedriver-autoinstaller
+requests

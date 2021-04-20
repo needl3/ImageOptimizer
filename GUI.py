@@ -3,8 +3,6 @@ from tkinter import filedialog
 import variable_container as vc
 import api_work
 import os
-import platform
-import shutil
 import requests
 background_color = 'light green'
 def generateKey():
@@ -20,7 +18,7 @@ def generateKey():
 
 		#--------------------Key generation center--------------------------------------
 		if no_credentials:
-			
+			pass
 		else:
 			if requests.post('https://tinify.com/web/api', json = {'fullName':'noone', 'mail':email}).status_code == 200:
 				lab.config(text="Now, check your email for the key and paste it in the empty API field", height=5)
@@ -43,8 +41,8 @@ def generateKey():
 	ent = tk.Entry(subRoot2, width=30)
 	ent.grid(row=1, column=2, padx=5)
 	
-	tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent.get(), root)).grid(row=2, column=1, padx=3)
-	tk.Button(subRoot2, text='Generate with no credentials.', command=lambda: submitted(subRoot, subRoot2, ent.get(), root, no_credentials = True)).grid(row=2, column=2, padx=3)
+	tk.Button(subRoot2, text='Submit', command=lambda: submitted(subRoot, subRoot2, ent.get(), root)).grid(row=2, columnspan=10, padx=3)
+	#tk.Button(subRoot2, text='Generate with no credentials.', command=lambda: submitted(subRoot, subRoot2, ent.get(), root, no_credentials = True)).grid(row=2, column=2, padx=3)
 	root.mainloop()
 
 
